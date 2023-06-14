@@ -1,2 +1,4 @@
 # vw_tech_challenge
-Backend Technical Challenge
+Backend Technical Challenge implemented by Sergio López Jiménez
+
+
