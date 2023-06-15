@@ -1,11 +1,12 @@
 package com.techtest.app.domain;
 
-import com.techtest.app.domain.exceptions.RobotException;
-import com.techtest.app.domain.values.Orientation;
-import com.techtest.app.domain.values.Status;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.tuple.Pair;
+
+import static com.techtest.app.domain.values.Orientation.NORTH;
+import static org.apache.commons.lang3.StringUtils.SPACE;
 
 @EqualsAndHashCode
 @ToString
@@ -13,28 +14,32 @@ import lombok.ToString;
 public class Robot {
 
     private final Position position;
-    private final Status status;
+    private final Pair<Integer, Integer> workplaceSize;
 
-    public Robot() {
-        this.status = Status.WAITING_INSTRUCTIONS;
-        this.position = new Position(0, 0, Orientation.NORTH);
+    public Robot(Pair<Integer, Integer> workplaceSize, Position initialPosition) {
+        this.position = initialPosition;
+        this.workplaceSize = workplaceSize;
     }
 
-    public Robot(Position position) {
-        this.status = Status.WAITING_INSTRUCTIONS;
-        this.position = position;
+    public Robot(Pair<Integer, Integer> workplaceSize) {
+        this.position = new Position(0, 0, NORTH);
+        this.workplaceSize = workplaceSize;
     }
 
     public void move() {
-        if (status.equals(Status.WAITING_INSTRUCTIONS)) {
-            switch (position.getOrientation()) {
-                case NORTH -> position.increaseY();
-                case EAST -> position.increaseX();
-                case SOUTH -> position.decreaseY();
-                case WEST -> position.decreaseX();
+        switch (position.getOrientation()) {
+            case NORTH -> {
+                if (position.getPositionY() + 1 < workplaceSize.getRight()) {
+                    position.increaseY();
+                }
             }
-        } else {
-            throw new RobotException("Robot is not cleaning right now");
+            case EAST -> {
+                if (position.getPositionY() + 1 < workplaceSize.getRight()) {
+                    position.increaseX();
+                }
+            }
+            case SOUTH -> position.decreaseY();
+            case WEST -> position.decreaseX();
         }
     }
 
@@ -54,5 +59,13 @@ public class Robot {
             case SOUTH -> position.orientateWest();
             case EAST -> position.orientateSouth();
         }
+    }
+
+    public String getCurrentPositionAsString() {
+        return position.getPositionX() +
+                SPACE +
+                position.getPositionY() +
+                SPACE +
+                position.getOrientation().getValue();
     }
 }

@@ -1,17 +1,38 @@
 package com.techtest.app.domain.services;
 
-import org.apache.commons.lang3.tuple.Pair;
+import com.techtest.app.domain.Robot;
+import com.techtest.app.domain.Scenario;
+import com.techtest.app.domain.ports.RobotManagementPort;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.List;
 
-public class RobotManagement {
+import static org.apache.commons.lang3.StringUtils.LF;
 
+public class RobotManagement implements RobotManagementPort {
 
-    private void setWorkspaceDimensions(Integer length, Integer width) {
-
+    private static void appendLastPositionToResults(StringBuilder responseBuilder, String currentRobotPosition) {
+        if (responseBuilder.length() > 0 && responseBuilder.length() % 5 == 0) {
+            responseBuilder.append(LF);
+        }
+        responseBuilder.append(currentRobotPosition);
     }
 
-    public List<Pair<String, String>> splitInstructions(String instructions) {
-        return null;
+    @Override
+    public String executeScenarios(List<Scenario> scenarios) {
+        StringBuilder responseBuilder = new StringBuilder();
+        scenarios.forEach(scenario -> {
+            scenario.validateInitialPositionValidForWorkplace();
+            var robot = new Robot(scenario.getWorkplace(), scenario.getInitialPosition());
+            scenario.getInstructions().forEach(instruction -> {
+                switch (instruction) {
+                    case M -> robot.move();
+                    case L -> robot.rotateLeft();
+                    case R -> robot.rotateRight();
+                }
+            });
+            appendLastPositionToResults(responseBuilder, robot.getCurrentPositionAsString());
+        });
+        return responseBuilder.length() > 0 ? responseBuilder.toString() : Strings.EMPTY;
     }
 }

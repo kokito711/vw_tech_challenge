@@ -6,9 +6,19 @@ import lombok.Getter;
 public enum Orientation {
     NORTH("N"), EAST("E"), SOUTH("S"), WEST("W");
 
-    private String orientation;
+    private final String value;
 
     Orientation(String orientation) {
-        this.orientation = orientation;
+        this.value = orientation;
     }
+
+    public static Orientation fromValue(String value) {
+        for (Orientation orientation : Orientation.values()) {
+            if (orientation.getValue().equalsIgnoreCase(value)) {
+                return orientation;
+            }
+        }
+        throw new EnumConstantNotPresentException(Orientation.class, "Orientation value not found");
+    }
+
 }
