@@ -1,8 +1,8 @@
 package com.techtest.app.domain;
 
 import com.techtest.app.domain.exceptions.ScenarioException;
+import com.techtest.app.domain.factories.PositionFactory;
 import com.techtest.app.domain.values.Instruction;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,7 +12,6 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Getter
@@ -26,7 +25,7 @@ public class Scenario {
 
     public Scenario(@NonNull Integer length, @NonNull Integer width, String initialPosition, List<Character> instructions) {
         this.workplace = Pair.of(length, width);
-        this.initialPosition = Position.fromString(initialPosition);
+        this.initialPosition = PositionFactory.fromString(initialPosition);
         this.instructions = instructions.stream().map(Instruction::fromValue).collect(Collectors.toList());
     }
 

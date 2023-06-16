@@ -21,6 +21,6 @@ public enum Instruction {
                 return instruction;
             }
         }
-        throw new RobotException("Instruction not valid");
+        throw new RobotException("Instruction not valid (" + value + ")");
     }
 }

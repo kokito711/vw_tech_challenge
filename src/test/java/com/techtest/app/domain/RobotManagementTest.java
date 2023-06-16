@@ -1,8 +1,7 @@
-package com.techtest.app.domain.services;
+package com.techtest.app.domain;
 
-import com.techtest.app.domain.Scenario;
+import com.techtest.app.domain.services.RobotManagement;
 import org.apache.logging.log4j.util.Strings;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -41,20 +40,6 @@ public class RobotManagementTest {
         var response = robotManagement.executeScenarios(scenarios);
 
         assertThat(response).isEqualTo(Strings.EMPTY);
-    }
-
-    //TODO move to integration test
-    @Test
-    @Disabled
-    void shouldThrowErrorWhenScenarioContainsInvalidInitialPosition() {
-        var scenario = List.of(new Scenario(5, 5, "", Collections.emptyList()));
-
-    }
-
-    //TODO move to integration test
-    @Test
-    @Disabled
-    void shouldThrowErrorWhenScenarioContainsInvalidInstructions() {
     }
 
     @ParameterizedTest
